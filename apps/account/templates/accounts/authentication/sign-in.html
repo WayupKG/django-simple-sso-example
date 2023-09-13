@@ -1,0 +1,66 @@
+{% extends 'accounts/base.html' %}
+{% load static %}
+
+{% block title %}Авторизация{% endblock %}
+
+{% block content %}
+    <div class="authentication-info col-lg-7 col-md-7 col-12">
+        {% include "accounts/authentication/info-content.html" with short_info="Мы верим, что знания не знают границ и что каждый должен иметь доступ к информации, поэтому мы стремимся сделать нашу коллекцию доступной для всех. Спасибо, что выбрали нашу электронную библиотеку, и счастливого чтения!" %}
+    </div>
+    <div class="authentication-form col-lg-5 col-md-5 col-12">
+        <h3 class="mb-2 text-center">Авторизация</h3>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="bs-toast toast fade my-3 show bg-{% if message.tags %}{{ message.tags }}{% endif %}"
+                     role="alert"
+                     aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header">
+                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body">{{ message }}</div>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <form id="formAuthentication" class="mb-3 fv-plugins-bootstrap5 fv-plugins-framework" method="POST"
+              novalidate="novalidate">
+            {% csrf_token %}
+            <div class="mb-3 fv-plugins-icon-container">
+                <label for="{{ form.email.id_for_label }}" class="form-label">{{ form.email.label }}</label>
+                {{ form.email }}
+                {% if form.email.errors %}
+                    <div class="fv-plugins-message-container invalid-feedback">
+                        <div data-field="{{ form.email.id_for_label }}" data-validator="stringLength">{{ form.email.errors }}</div>
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="mb-4 form-password-toggle fv-plugins-icon-container">
+                <div class="d-flex justify-content-between">
+                    <label class="form-label" for="{{ form.password.id_for_label }}">{{ form.password.label }}</label>
+                    <a href="#">
+                        <small>Забыли пароль?</small>
+                    </a>
+                </div>
+                <div class="input-group input-group-merge has-validation">
+                    {{ form.password }}
+                    <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+                </div>
+                {% if form.password.errors %}
+                    <div class="fv-plugins-message-container invalid-feedback">
+                        <div data-field="{{ form.password.id_for_label }}" data-validator="stringLength">{{ form.password.errors }}</div>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="my-3">
+                <button class="btn btn-primary d-grid w-100" type="submit">Авторизоваться</button>
+            </div>
+            {% if IS_POSSIBLE_REGISTER %}
+                <h5 class="text-center mt-4">
+                    <a href="#">Создать учетную запись</a>
+                </h5>
+            {% endif %}
+        </form>
+    </div>
+{% endblock content %}

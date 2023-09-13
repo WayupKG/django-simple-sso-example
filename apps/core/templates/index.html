@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>SSO Client</title>
+</head>
+<body>
+    <div>
+        {% if user.is_authenticated %}
+            <h1>Username - {{ user.username }}</h1>
+            <ul>
+                <li>first name - {{ user.first_name }}</li>
+                <li>last name - {{ user.last_name }}</li>
+                <li>active - {{ user.is_active }}</li>
+                <li>superuser - {{ user.is_superuser }}</li>
+            </ul>
+        {% else %}
+            <h1>No authenticated</h1>
+        {% endif %}
+    </div>
+</body>
+</html>

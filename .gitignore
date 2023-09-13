@@ -1,0 +1,15 @@
+.idea
+.DS_Store
+
+__pycache__/
+!**/__pycache__/
+**/__pycache__
+**/__pycache__/**
+*.py[cod]
+.pyc
+*.pyc
+
+media/*
+!*media
+
+db.sqlite3

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+{% load static i18n qr_code %}
+{% get_current_language as LANGUAGE_CODE %}
+<html lang="{{ LANGUAGE_CODE }}" class="light-style layout-navbar-fixed layout-menu-fixed" data-assets-path="/static/">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"/>
+
+    <title>Регистрация - 2 этап | {{ ORGANIZATION.SHORT_TITLE }}</title>
+    <meta property="description" content="{{ ORGANIZATION.DESCRIPTION }}">
+
+    <meta property="og:title" content="{{ ORGANIZATION.TITLE }}">
+    <meta property="og:image" content="{% static "images/logo/logo-main.png" %}">
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ CURRENT_SITE_URL }}">
+    <meta property="og:title" content="{{ ORGANIZATION.TITLE }}">
+    <meta property="og:description" content="{{ ORGANIZATION.DESCRIPTION }}">
+    <meta property="og:image" content="{% static "images/logo/logo-main.png" %}">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="{{ CURRENT_SITE_URL }}">
+    <meta property="twitter:title" content="{{ ORGANIZATION.TITLE }}">
+    <meta property="twitter:description" content="{{ ORGANIZATION.DESCRIPTION }}">
+    <meta property="twitter:image" content="{% static "images/logo/logo-main.png" %}">
+
+    <link rel="stylesheet" href="{% static 'css/pages/page-auth.css' %}"/>
+    <link rel="stylesheet" href="{% static 'plugins/formvalidation/css/formValidation.min.css' %}">
+    {% include 'Base/links.html' %}
+    <script src="{% static 'js/helpers.js' %}"></script>
+    <script src="{% static 'js/template-customizer.js' %}"></script>
+    <script src="{% static 'js/config.js' %}"></script>
+</head>
+<body>
+    <div class="authentication-wrapper authentication-basic container-p-y">
+        <div class="authentication-inner sign-up authentication-bg row shadow mx-0">
+            <div class="card">
+                <div class="card-body">
+
+                    <div class="app-brand justify-content-center">
+                        <img src="{% static 'images/logo/logo.png' %}" alt="" width="200">
+                    </div>
+
+                    <form id="formAuthentication"
+                          class="mb-3 fv-plugins-bootstrap5 fv-plugins-framework row"
+                          method="POST" novalidate="novalidate" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        {% for field in form %}
+                            {% if field != form.password1 and field != form.password2 %}
+                                <div class="col-12">
+                                    <div class="mb-3 fv-plugins-icon-container">
+                                        <label for="{{ field.id_for_label }}"
+                                               class="form-label">{{ field.label }}</label>
+                                        {{ field }}
+                                        <div class="fv-plugins-message-container invalid-feedback">
+                                            {% if field.errors %}
+                                                {% for error in field.errors %}
+                                                    <div data-field="{{ field.id_for_label }}"
+                                                         data-validator="stringLength">{{ error }}</div>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+
+                        <div class="col-12">
+                            <div class="mb-3 form-password-toggle fv-plugins-icon-container">
+                                <label for="{{ form.password1.id_for_label }}"
+                                       class="form-label">{{ form.password1.label }}</label>
+                                <div class="input-group input-group-merge has-validation">
+                                    {{ form.password1 }}
+                                    <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+                                </div>
+                                {{ form.password1.help_text|safe }}
+                                <div class="fv-plugins-message-container invalid-feedback">
+                                    {% if form.password1.errors %}
+                                        {% for error in form.password1.errors %}
+                                            <div data-field="{{ form.password1.id_for_label }}"
+                                                 data-validator="stringLength">{{ error }}</div>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="mb-3 form-password-toggle fv-plugins-icon-container">
+                                <label for="{{ form.password2.id_for_label }}"
+                                       class="form-label">{{ form.password2.label }}</label>
+                                <div class="input-group input-group-merge has-validation">
+                                    {{ form.password2 }}
+                                    <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+                                </div>
+                                <div class="fv-plugins-message-container invalid-feedback">
+                                    {% if form.password2.errors %}
+                                        {% for error in form.password2.errors %}
+                                            <div data-field="{{ form.password2.id_for_label }}"
+                                                 data-validator="stringLength">{{ error }}</div>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-check mb-3">
+                                <input type="checkbox" class="form-check-input" id="terms-conditions" name="terms" required="required">
+                                <label class="form-check-label" for="terms-conditions">
+                                    Соглашайтесь с нашими
+                                    <a href="{% url 'agreement' %}">правилами и условиями</a>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="mb-3 mt-3">
+                            <button class="btn btn-primary d-grid w-100" type="submit">Создать учетную запись</button>
+                        </div>
+                    </form>
+                    <p class="text-center">
+                        <span>Уже зарегистрировались? </span>
+                        <a href="{% url 'sign_in' %}">
+                            <span>Войти</span>
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% include 'Base/script.html' %}
+    <script src="{% static 'js/auth/cleave.js' %}"></script>
+    <script src="{% static 'plugins/formvalidation/js/FormValidation.min.js' %}"></script>
+    <script src="{% static 'plugins/formvalidation/js/plugins/Bootstrap5.min.js' %}"></script>
+    <script src="{% static 'plugins/formvalidation/js/plugins/AutoFocus.min.js' %}"></script>
+    <script src="{% static 'js/auth/pages-auth.js' %}"></script>
+</body>
+</html>
+
+
